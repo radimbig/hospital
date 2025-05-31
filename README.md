@@ -11,10 +11,11 @@ This project is a [briefly describe your project e.g., Hospital Management Syste
 - [Database Setup](#database-setup)
 - [Running the Application](#running-the-application)
 - [Deployment to AWS](#deployment-to-aws)
+- [Features](#features)
 
 ## Prerequisites
 
-- .NET SDK (Specify version, e.g., .NET 6.0 or later)
+- .NET SDK (Specify version, e.g., .NET 8.0 or later)
 - Node.js and npm (Specify version, e.g., Node.js 16.x or later) - If a frontend is part of this repository
 - AWS CLI (If deploying to AWS)
 - Docker (Optional, if using containers)
@@ -23,8 +24,8 @@ This project is a [briefly describe your project e.g., Hospital Management Syste
 
 1.  **Clone the repository:**
     ```bash
-    git clone <your-repository-url>
-    cd <your-project-directory>
+    git clone https://github.com/radimbig/kamsoft.git
+    cd kamsoft
     ```
 
 2.  **Backend Setup (kamsoft API):**
@@ -33,7 +34,7 @@ This project is a [briefly describe your project e.g., Hospital Management Syste
     cd kamsoft 
     dotnet restore
     ```
-    *(Add any other specific backend setup steps here, e.g., installing specific tools)*
+    Next, rename `appsettingsExample.json` to `appsettings.json`. Open `appsettings.json` and fill in your actual configuration values for the database connection, Azure services (Message Bus, Blob Storage), JWT secret key, and any other settings. Replace all placeholder values with your specific details.
 
 3.  **Frontend Setup (if applicable):**
     Navigate to the frontend project directory (e.g., `frontend`):
@@ -47,7 +48,7 @@ This project is a [briefly describe your project e.g., Hospital Management Syste
 
 ### API
 
-The API can be configured using Environment Variables. Create a `.env` file in the `kamsoft` directory or set system environment variables.
+The API can be configured using Environment Variables for some settings. However, core configurations like database connection, Azure services, and JWT secrets are managed in the `kamsoft/appsettings.json` file.
 
 Key environment variables:
 
@@ -57,12 +58,38 @@ Key environment variables:
     ```
 -   `FRONTEND_URL`: Specifies the allowed origin for CORS (Cross-Origin Resource Sharing) policy. This should be the URL of your deployed frontend application.
     ```
-    FRONTEND_URL=http://hospital-frontend.s3-website.eu-north-1.amazonaws.com
+    FRONTEND_URL=http://your-url-frontend.com
     ```
--   `DB_CONNECTION_STRING`: Your database connection string. It's recommended to store this securely, for example in a `dbpasswords.env` file (which should be in your `.gitignore`) and load it into your application configuration. Example format:
-    ```
-    Server=your_server;Port=your_port;Database=your_database;User=your_user;Password=your_password;
-    ```
+
+In `kamsoft/appsettings.json`, you will need to configure:
+-   **ConnectionStrings**: Your database connection string.
+-   **AzureMessageBus**: Configuration for Azure Service Bus.
+-   **AzureBlobStorage**: Configuration for Azure Blob Storage.
+-   **JwtSettings**: Your secret key for JWT generation and validation, issuer, and audience.
+
+Example structure within `appsettings.json`:
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=your_server;Port=your_port;Database=your_database;User=your_user;Password=your_password;"
+  },
+  "AzureMessageBus": {
+    "ConnectionString": "your_service_bus_connection_string",
+    "QueueName": "your_queue_name"
+  },
+  "AzureBlobStorage": {
+    "ConnectionString": "your_blob_storage_connection_string",
+    "ContainerName": "your_container_name"
+  },
+  "JwtSettings": {
+    "Secret": "YOUR_VERY_SECURE_SECRET_KEY_HERE_REPLACE_IT",
+    "Issuer": "your_api_issuer",
+    "Audience": "your_api_audience"
+  },
+  // ... other settings
+}
+```
+Ensure that `appsettings.json` is included in your `.gitignore` file if it contains sensitive production credentials. For development, you can use `appsettings.Development.json` which overrides `appsettings.json`.
 
 ### Frontend
 
@@ -77,7 +104,7 @@ For the frontend application, it's crucial to configure the API endpoint address
 
 This project uses Entity Framework Core for database migrations. To set up or update the database schema:
 
-1.  Ensure your connection string is correctly configured (e.g., in `appsettings.Development.json` for local development, or via environment variables for production).
+1.  Ensure your connection string is correctly configured in `kamsoft/appsettings.json` (or `appsettings.Development.json` for local development).
 2.  Navigate to the directory containing the `csproj` file of your main backend project (e.g., `kamsoft`).
 3.  Run the following command to apply migrations:
     ```bash
@@ -144,6 +171,41 @@ This project is structured to be deployable to AWS, particularly using services 
     -   Upload the contents of your frontend's `build` (or `dist`) folder to the S3 bucket.
     -   Consider using AWS CloudFront for HTTPS, caching, and global distribution.
 
----
+## Features
 
-*Remember to replace placeholders like `<your-repository-url>`, `<your-project-directory>`, and project-specific version numbers with actual values.* 
+This API provides a comprehensive set of features for managing a hospital or clinic environment. Key functionalities are exposed through the following controllers:
+
+### Core Functionalities:
+
+🔑 **Authentication (`AuthController`):**
+*   User registration with login and password.
+*   Secure user login returning JWT (JSON Web Tokens) for session management.
+👥 **User & Person Management (`PersonController`):**
+*   User self-registration (after initial credential setup via `AuthController`).
+*   Retrieval of the currently authenticated user's profile (`/me`).
+*   Role management: Admins can assign roles (e.g., Admin, Doctor, Patient) to users.
+*   Listing of users by role (e.g., retrieve all doctors).
+📅 **Appointment Scheduling (`AppointmentController`):**
+*   Admins can create appointments, assigning a patient to a doctor for a specific time slot.
+*   Doctors and Patients can view their upcoming appointments.
+*   Doctors can create appointments for their patients.
+*   Admins and the assigned Doctor can cancel/delete appointments.
+🖼️ **Profile Image Management (`ImageController`):**
+*   Users (Admin, Doctor, Patient) can upload and manage their profile pictures.
+*   Retrieval of user profile images.
+
+### Technical Highlights:
+
+🧩 **CQRS with MediatR:** Utilizes the Command Query Responsibility Segregation pattern via the MediatR library for clean and maintainable business logic.
+🛡️ **Input Validation:** Implements request validation (e.g., for appointment times, counts) to ensure data integrity and provide clear error feedback.
+🔒 **Role-Based Authorization:** Secures endpoints based on user roles (Admin, Doctor, Patient), ensuring users can only access appropriate functionalities.
+🔄 **AutoMapper:** Simplifies object-to-object mapping (e.g., entities to ViewModels).
+☁️ **Azure Integration:**
+*   **Azure Blob Storage (`ImageController`):** Leverages Azure Blob Storage for persisting and serving user profile images efficiently.
+*   **Azure Queue Storage (`AppointmentController`):** Uses Azure Queue Storage for asynchronous processing of appointment-related events (e.g., creation, deletion notifications).
+🔗 **Dependency Injection:** Makes extensive use of dependency injection for loosely coupled and testable components.
+⚡ **Asynchronous Operations:** Employs `async/await` for non-blocking I/O operations, enhancing performance and scalability.
+🛠️ **Admin Console Panel (`AdminPanel`):**
+*   A separate console application (`AdminPanel/Program.cs`) is provided for administrative tasks.
+
+---
