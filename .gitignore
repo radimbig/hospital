@@ -1,0 +1,14 @@
+/.vs
+/bin
+/obj
+
+**/bin/
+**/obj/
+dbpasswords.env
+/kamsoft/obj/*
+/kamsoft/bin/*
+appsettings.Development.json
+/StaticFiles/Avatars/*
+Social_Network_API.slnLaunch.user
+
+kamsoft/appsettings.json

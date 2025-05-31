@@ -1,0 +1,68 @@
+graph TD
+    subgraph "Roles"
+        Admin
+        Doctor
+        Patient
+        Public
+    end
+
+    subgraph "Action Groups"
+        CoreUserActions["Core User Actions (Image & Person management)"]
+    end
+
+    %% Role Inheritance/Grouping
+    Doctor -- "inherits Patient's permissions" --> Patient
+
+    subgraph "AppointmentController (base: /api/Appointment)"
+        AppCtrl_AddToDoctor["POST / (AddToDoctor)"]
+        AppCtrl_GetMyAppointments["GET /me/{count} (GetMyAppointments)"]
+        AppCtrl_GetAppointmentsFor["GET /{doctorLogin}/{count} (GetAppointmentsFor)"]
+        AppCtrl_AddApointment["POST /me (AddApointment)"]
+        AppCtrl_DeleteApointment["DELETE /{appointmentId} (DeleteApointment)"]
+    end
+
+    subgraph "AuthController (base: /api/Auth)"
+        AuthCtrl_Login["POST /login (Login)"]
+        AuthCtrl_Register["POST /register (Register)"]
+    end
+
+    subgraph "ImageController (base: /api/Image)"
+        ImageCtrl_GetImage["GET /{personId} (GetImage)"]
+        ImageCtrl_AddImageToMyPerson["POST / (AddImageToMyPerson)"]
+    end
+
+    subgraph "PersonController (base: /api/Person)"
+        PersonCtrl_Create["POST /register (Create)"]
+        PersonCtrl_GetMe["GET /me (GetMe)"]
+        PersonCtrl_SetRole["POST /role (SetRole)"]
+        PersonCtrl_GetDoctors["GET /doctors (GetDoctors)"]
+    end
+
+    %% Define what's in CoreUserActions
+    CoreUserActions --> ImageCtrl_GetImage
+    CoreUserActions --> ImageCtrl_AddImageToMyPerson
+    CoreUserActions --> PersonCtrl_Create
+    CoreUserActions --> PersonCtrl_GetMe
+
+    %% Public actions (available to anyone)
+    Public --> AuthCtrl_Login
+    Public --> AuthCtrl_Register
+
+    %% Patient actions
+    Patient --> CoreUserActions
+    Patient --> AppCtrl_GetMyAppointments
+
+    %% Doctor actions:
+    %% Doctor inherits Patient's permissions (CoreUserActions + AppCtrl_GetMyAppointments)
+    %% via "Doctor -- "inherits Patient's permissions" --> Patient"
+    %% Additional Doctor-specific permissions:
+    Doctor --> AppCtrl_AddApointment
+    Doctor --> AppCtrl_DeleteApointment
+
+    %% Admin actions
+    Admin --> CoreUserActions
+    Admin --> AppCtrl_DeleteApointment
+    Admin --> AppCtrl_AddToDoctor
+    Admin --> AppCtrl_GetAppointmentsFor
+    Admin --> PersonCtrl_SetRole
+    Admin --> PersonCtrl_GetDoctors

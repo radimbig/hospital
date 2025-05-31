@@ -1,0 +1,6 @@
+@kamsoft_HostAddress = http://localhost:5050
+
+GET {{kamsoft_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
