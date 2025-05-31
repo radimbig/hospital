@@ -24,14 +24,14 @@ This project was created for educational purposes during an interview process at
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/radimbig/kamsoft.git
-    cd kamsoft
+    git clone https://github.com/radimbig/hospital.git
+    cd hospital
     ```
 
 2.  **Backend Setup (hospital API):**
     Navigate to the backend project directory (e.g., `hospital`):
     ```bash
-    cd hospital 
+    cd kamsoft 
     dotnet restore
     ```
     Next, rename `appsettingsExample.json` to `appsettings.json`. Open `appsettings.json` and fill in your actual configuration values for the database connection, Azure services (Message Bus, Blob Storage), JWT secret key, and any other settings. Replace all placeholder values with your specific details.
@@ -42,7 +42,7 @@ This project was created for educational purposes during an interview process at
     cd frontend
     npm install
     ```
-    *(Add any other specific frontend setup steps here)*
+    
 
 ## Configuration
 
@@ -61,7 +61,7 @@ Key environment variables:
     FRONTEND_URL=http://your-url-frontend.com
     ```
 
-In `hospital/appsettings.json`, you will need to configure:
+In `kamsoft/appsettings.json`, you will need to configure:
 -   **ConnectionStrings**: Your database connection string.
 -   **AzureMessageBus**: Configuration for Azure Service Bus.
 -   **AzureBlobStorage**: Configuration for Azure Blob Storage.
@@ -104,8 +104,8 @@ For the frontend application, it's crucial to configure the API endpoint address
 
 This project uses Entity Framework Core for database migrations. To set up or update the database schema:
 
-1.  Ensure your connection string is correctly configured in `hospital/appsettings.json` (or `appsettings.Development.json` for local development).
-2.  Navigate to the directory containing the `csproj` file of your main backend project (e.g., `hospital`).
+1.  Ensure your connection string is correctly configured in `kamsoft/appsettings.json` (or `appsettings.Development.json` for local development).
+2.  Navigate to the directory containing the `csproj` file of your main backend project (e.g., `kamsoft`).
 3.  Run the following command to apply migrations:
     ```bash
     dotnet ef database update
@@ -115,7 +115,7 @@ This project uses Entity Framework Core for database migrations. To set up or up
 ## Running the Application
 
 ### Backend
-Navigate to the `hospital` directory and run:
+Navigate to the `kamsoft` directory and run:
 ```bash
 dotnet run
 ```
