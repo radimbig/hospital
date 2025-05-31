@@ -1,4 +1,4 @@
-# Kamsoft
+# Hospital
 
 This project was created for educational purposes during an interview process at Kamsoft, aimed at hospital management..
 
