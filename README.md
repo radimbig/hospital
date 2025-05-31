@@ -1,6 +1,6 @@
-# Project Name (Replace with actual project name)
+# Kamsoft
 
-This project is a [briefly describe your project e.g., Hospital Management System API].
+This project was created for educational purposes during an interview process at Kamsoft, aimed at hospital management..
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)
