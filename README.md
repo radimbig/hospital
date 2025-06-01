@@ -227,6 +227,9 @@ Below are some screenshots showcasing the application's interface and functional
 **Appointments Management (Admin/Doctor View):**
 ![Appointments Management](presentation/screenshots/managment.PNG)
 
+**Doctor's Appointment Calendar:**
+![Doctor's Appointments](presentation/screenshots/appoitmentsOfDoctor.PNG)
+
 **My Appointments Page (Patient/Doctor View):**
 ![My Appointments](presentation/screenshots/my-appoitments-page.PNG)
 
@@ -236,7 +239,7 @@ Below are some screenshots showcasing the application's interface and functional
 **Create Appointment Form:**
 ![Create Appointment](presentation/screenshots/create-appointment.PNG)
 
-**General Capture (Possibly API related or other view):**
+**No appointment example:**
 ![Capture](presentation/screenshots/Capture.PNG)
 
 **API Endpoint Example :**
