@@ -12,6 +12,7 @@ This project was created for educational purposes during an interview process at
 - [Running the Application](#running-the-application)
 - [Deployment to AWS](#deployment-to-aws)
 - [Features](#features)
+- [Screenshots](#screenshots)
 
 ## Prerequisites
 
@@ -208,4 +209,39 @@ This API provides a comprehensive set of features for managing a hospital or cli
 🛠️ **Admin Console Panel (`AdminPanel`):**
 *   A separate console application (`AdminPanel/Program.cs`) is provided for administrative tasks.
 
+*(The `TempController` appears to be for development or testing purposes, providing basic CRUD operations on Person entities.)*
+
+## Screenshots
+
+Below are some screenshots showcasing the application's interface and functionality:
+
+**Login Page:**
+![Login Page](presentation/screenshots/login.PNG)
+
+**Registration Modal:**
+![Registration Modal](presentation/screenshots/registerModal.PNG)
+
+**User Profile Page:**
+![User Profile](presentation/screenshots/profile.PNG)
+
+**Appointments Management (Admin/Doctor View):**
+![Appointments Management](presentation/screenshots/managment.PNG)
+
+**My Appointments Page (Patient/Doctor View):**
+![My Appointments](presentation/screenshots/my-appoitments-page.PNG)
+
+**Appointment Details:**
+![Appointment Details](presentation/screenshots/appoitnments-details.PNG)
+
+**Create Appointment Form:**
+![Create Appointment](presentation/screenshots/create-appointment.PNG)
+
+**General Capture (Possibly API related or other view):**
+![Capture](presentation/screenshots/Capture.PNG)
+
+**API Endpoint Example :**
+![API Example](presentation/screenshots/api.PNG)
+
+
 ---
+
